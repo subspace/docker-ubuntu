@@ -19,7 +19,9 @@ RUN \
 # Build image with
 FROM arm64v8/ubuntu:18.04
 
-COPY --from=0 /usr/bin/qemu-aarch64-static /bin/run
+COPY --from=0 /usr/bin/qemu-aarch64-static /usr/bin/qemu-aarch64-static
+RUN ["/usr/bin/qemu-aarch64-static", "/bin/ln", "/usr/bin/qemu-aarch64-static", "/bin/run"]
+
 COPY docker/upgrade.sh /
 
 RUN ["/bin/run", "/bin/bash", "/upgrade.sh"]

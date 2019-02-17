@@ -8,4 +8,4 @@ subspacelabs/ubuntu:arm32v7
 subspacelabs/ubuntu:arm64v8
 ```
 
-All of them have `/bin/run` executable that you can use as a wrapper during build process, so that any ARM images can be build on any AMD64 machine, even Docker Hub.
+All of them have `/bin/run` executable that you can use as a wrapper during build process, so that any ARM images can be build on any AMD64 machine, even Docker Hub (notice, last 2 lines of code in each Dockerfile are identical).

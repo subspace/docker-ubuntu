@@ -19,7 +19,9 @@ RUN \
 # Build image with
 FROM arm32v7/ubuntu:18.04
 
-COPY --from=0 /usr/bin/qemu-arm-static /bin/run
+COPY --from=0 /usr/bin/qemu-arm-static /usr/bin/qemu-arm-static
+RUN ["/usr/bin/qemu-arm-static", "/bin/ln", "/usr/bin/qemu-arm-static", "/bin/run"]
+
 COPY docker/upgrade.sh /
 
-RUN ["/bin/run", "/bin/bash", "/upgrade.sh"]
+RUN ["/bin/run", "-execve", "/bin/bash", "/upgrade.sh"]
