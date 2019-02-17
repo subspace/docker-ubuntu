@@ -1,7 +1,5 @@
 #!/bin/bash-amd64
 
-exec $@
-
 case "$ARCH" in
     arm32v7)
         /usr/bin/qemu-arm-static -execve $@
