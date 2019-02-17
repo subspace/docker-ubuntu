@@ -2,10 +2,10 @@
 
 case "$ARCH" in
     arm32v7)
-        /usr/bin/qemu-arm-static -execve $@
+        exec /usr/bin/qemu-arm-static -execve $@
         ;;
     arm64v8)
-        /usr/bin/qemu-aarch64-static -execve $@
+        exec /usr/bin/qemu-aarch64-static -execve $@
         ;;
     *)
         exec $@
