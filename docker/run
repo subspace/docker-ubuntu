@@ -2,16 +2,14 @@
 
 exec $@
 
-case "$(uname -i)" in
-    x86_64)
-        exec $@
-        ;;
-    armv7l)
+case "$ARCH" in
+    arm32v7)
         exec /usr/bin/qemu-arm-static -execve $@
         ;;
-    aarch64)
+    arm64v8)
         exec /usr/bin/qemu-arm-static -execve $@
         ;;
     *)
-        echo "Unsupported architecture $(uname -i)"
-        exit 1
+        exec $@
+        ;;
+esac

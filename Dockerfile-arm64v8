@@ -19,6 +19,8 @@ RUN \
 # Build image with
 FROM arm64v8/ubuntu:18.04
 
+ENV ARCH=arm64v8
+
 COPY --from=0 /usr/bin/qemu-aarch64-static /usr/bin/qemu-aarch64-static
 COPY --from=0 /bin/bash-static /bin/bash-amd64
 

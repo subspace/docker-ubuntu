@@ -19,6 +19,8 @@ RUN \
 # Build image with
 FROM arm32v7/ubuntu:18.04
 
+ENV ARCH=arm32v7
+
 COPY --from=0 /usr/bin/qemu-arm-static /usr/bin/qemu-arm-static
 COPY --from=0 /bin/bash-static /bin/bash-amd64
 
