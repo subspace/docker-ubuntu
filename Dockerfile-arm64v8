@@ -1,4 +1,4 @@
-# Just download qemu-aarch64-static
+# Just download qemu-aarch64-static and bash-static
 FROM ubuntu:18.04
 
 ENV \
@@ -10,7 +10,7 @@ RUN \
     RELEASE_BUILD=qemu-$RELEASE-aarch64 && \
     RELEASE_FILE=$RELEASE_BUILD.tar.gz && \
     apt-get update && \
-    apt-get install -y --no-install-recommends curl ca-certificates && \
+    apt-get install -y --no-install-recommends curl ca-certificates bash-static && \
     curl -L -O $RELEASE_URL && \
     echo "$RELEASE_HASH $RELEASE_FILE" | sha256sum -c && \
     tar --extract --gzip --file $RELEASE_FILE && \
@@ -20,8 +20,9 @@ RUN \
 FROM arm64v8/ubuntu:18.04
 
 COPY --from=0 /usr/bin/qemu-aarch64-static /usr/bin/qemu-aarch64-static
-RUN ["/usr/bin/qemu-aarch64-static", "/bin/ln", "/usr/bin/qemu-aarch64-static", "/bin/run"]
+COPY --from=0 /bin/bash-static /bin/bash-amd64
 
+COPY docker/run /bin/run
 COPY docker/upgrade.sh /
 
 RUN ["/bin/run", "/bin/bash", "/upgrade.sh"]
