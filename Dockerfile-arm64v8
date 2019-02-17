@@ -1,0 +1,25 @@
+# Just download qemu-aarch64-static
+FROM ubuntu:18.04
+
+ENV \
+    RELEASE=3.0.0+resin \
+    RELEASE_HASH=a1ef52971537e11915565233f48aa179839f676008d7911c05b3ae94c08c4f5c
+
+RUN \
+    RELEASE_URL=https://github.com/balena-io/qemu/releases/download/v$RELEASE/qemu-$RELEASE-aarch64.tar.gz && \
+    RELEASE_BUILD=qemu-$RELEASE-aarch64 && \
+    RELEASE_FILE=$RELEASE_BUILD.tar.gz && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends curl ca-certificates && \
+    curl -L -O $RELEASE_URL && \
+    echo "$RELEASE_HASH $RELEASE_FILE" | sha256sum -c && \
+    tar --extract --gzip --file $RELEASE_FILE && \
+    mv $RELEASE_BUILD/qemu-aarch64-static /usr/bin/qemu-aarch64-static
+
+# Build image with
+FROM arm64v8/ubuntu:18.04
+
+COPY --from=0 /usr/bin/qemu-aarch64-static /bin/run
+COPY docker/upgrade.sh /
+
+RUN ["/bin/run", "/bin/bash", "/upgrade.sh"]

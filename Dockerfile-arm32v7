@@ -1,0 +1,25 @@
+# Just download qemu-arm-static
+FROM ubuntu:18.04
+
+ENV \
+    RELEASE=3.0.0+resin \
+    RELEASE_HASH=47ae430b0e7c25e1bde290ac447a720e2ea6c6e78cd84e44847edda289e020a8
+
+RUN \
+    RELEASE_URL=https://github.com/balena-io/qemu/releases/download/v$RELEASE/qemu-$RELEASE-arm.tar.gz && \
+    RELEASE_BUILD=qemu-$RELEASE-arm && \
+    RELEASE_FILE=$RELEASE_BUILD.tar.gz && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends curl ca-certificates && \
+    curl -L -O $RELEASE_URL && \
+    echo "$RELEASE_HASH $RELEASE_FILE" | sha256sum -c && \
+    tar --extract --gzip --file $RELEASE_FILE && \
+    mv $RELEASE_BUILD/qemu-arm-static /usr/bin/qemu-arm-static
+
+# Build image with
+FROM arm32v7/ubuntu:18.04
+
+COPY --from=0 /usr/bin/qemu-arm-static /bin/run
+COPY docker/upgrade.sh /
+
+RUN ["/bin/run", "/bin/bash", "/upgrade.sh"]
