@@ -7,4 +7,4 @@ RUN ["/bin/ln", "/bin/bash", "/bin/bash-amd64"]
 COPY docker/run /bin/run
 COPY docker/upgrade.sh /
 
-RUN ["/bin/run", "/upgrade.sh"]
+RUN ["/bin/run", "/bin/bash", "/upgrade.sh"]
